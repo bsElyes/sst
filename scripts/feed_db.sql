@@ -1,3 +1,4 @@
+-- feed database with test values
 INSERT INTO roles (role_name)
 VALUES
     ('ROLE_ADMIN'),

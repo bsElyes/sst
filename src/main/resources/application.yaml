@@ -1,5 +1,8 @@
-
+server:
+  port: 8081
 spring:
+  application:
+    name: sst
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/test
@@ -19,6 +22,7 @@ spring:
           brokers: localhost:9092
       bindings:
         binding-out-0:
+          destination: sandwich_orders
           content-type: text/plain
           group: sandwich_orders_group
         kafkaConsumer-in-0:
@@ -52,6 +56,4 @@ application:
         base64-secret: vapMht8V6g24zO4P6qDou4OQFaPgkcHMhCNTyF9UJi5kp0VH8ayv2YeeUIuUrFiqH/BWITaC/2FHRX+PQcvSIQ==
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
-server:
-  port: 8081
 

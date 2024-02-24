@@ -28,7 +28,7 @@ public class Ingredient {
     private BigDecimal price;
 
     @Column(name = "available_quantity", nullable = false)
-    private int availableQuantity;
+    private Integer availableQuantity;
 
     @Column(name = "type", nullable = false)
     private String type;

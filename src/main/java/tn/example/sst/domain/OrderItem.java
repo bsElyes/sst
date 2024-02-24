@@ -1,10 +1,15 @@
 package tn.example.sst.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +35,17 @@ public class OrderItem {
 
     @Column(name = "quantity", nullable = false)
     private int quantity;
+
+    public OrderItem(Order order, Ingredient ingredient, int quantity) {
+        this.order = order;
+        this.ingredient = ingredient;
+        this.quantity = quantity;
+    }
+
+    @JsonIgnore
+    public BigDecimal getTotalCost() {
+        return ingredient.getPrice().multiply(BigDecimal.valueOf(quantity));
+    }
 
     @Override
     public final boolean equals(Object o) {

@@ -1,6 +1,15 @@
+logging:
+  level:
+    ROOT: INFO
+    org.hibernate.SQL: INFO
+    tn.example.sst: DEBUG
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
   flyway:
-    enabled: false
+    user: test
+    password: test@pwd
+    url: jdbc:postgresql://localhost:5432/test
+    schemas: test
+    enabled: true

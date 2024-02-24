@@ -35,8 +35,6 @@ public class Statistic {
     @Column(name = "profit")
     private BigDecimal profit;
 
-    // Constructors, getters, and setters
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
