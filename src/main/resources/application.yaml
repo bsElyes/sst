@@ -1,0 +1,57 @@
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5432/test
+    username: test
+    password: test@pwd
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  cloud:
+    function:
+      definition: kafkaConsumer;kafkaProducer
+    stream:
+      kafka:
+        binder:
+          replicationFactor: 1
+          auto-create-topics: true
+          brokers: localhost:9092
+      bindings:
+        binding-out-0:
+          content-type: text/plain
+          group: sandwich_orders_group
+        kafkaConsumer-in-0:
+          destination: sandwich_orders
+          content-type: text/plain
+          group: sandwich_orders_group
+        kafkaProducer-out-0:
+          content-type: text/plain
+          group: sandwich_orders_group
+application:
+  api-docs:
+    default-include-pattern: ${server.servlet.context-path:}/api/**
+    management-include-pattern: ${server.servlet.context-path:}/management/**
+    title: Test Application API
+    description: SpringBoot Scaffolding App API documentation
+    version: 0.0.1
+    terms-of-service-url:
+    contact-name: "Elyes Ben Salah"
+    contact-url:
+    contact-email: "bselyes@gmail.com"
+    license: Apache-2.0
+    license-url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+    servers:
+      - url: "http://localhost:8081/api"
+        description: "Development server"
+      - url: "https://localhost:8081/api"
+        description: "Development server with TLS"
+  security:
+    authentication:
+      jwt:
+        base64-secret: vapMht8V6g24zO4P6qDou4OQFaPgkcHMhCNTyF9UJi5kp0VH8ayv2YeeUIuUrFiqH/BWITaC/2FHRX+PQcvSIQ==
+        token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 2592000
+server:
+  port: 8081
+
