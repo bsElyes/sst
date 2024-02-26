@@ -27,5 +27,3 @@ For more information, please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) fil
 For questions or support, please contact [Elyes Ben Salah] at [bselyes@gmail.com].
 
 ---
-
-Feel free to customize this README template further to include specific details about your project's architecture, configuration, and deployment instructions.
