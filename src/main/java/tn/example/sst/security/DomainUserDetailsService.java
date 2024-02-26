@@ -20,9 +20,7 @@ import java.util.Locale;
  */
 @Component("userDetailsService")
 public class DomainUserDetailsService implements UserDetailsService {
-
     private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
-
     private final UserRepository userRepository;
 
     public DomainUserDetailsService(UserRepository userRepository) {
@@ -33,7 +31,6 @@ public class DomainUserDetailsService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String username) {
         log.debug("Authenticating {}", username);
-
         String lowercaseLogin = username.toLowerCase(Locale.ENGLISH);
         return userRepository
                 .findOneByUsername(lowercaseLogin)
@@ -42,7 +39,6 @@ public class DomainUserDetailsService implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
-
         List<SimpleGrantedAuthority> grantedAuthorities = user
                 .getRoles()
                 .stream()

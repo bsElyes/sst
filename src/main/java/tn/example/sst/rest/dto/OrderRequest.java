@@ -12,8 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class OrderDTO {
-    private Long orderId;
-    private String status;
-    private List<IngredientDTO> ingredients;
+public class OrderRequest {
+    private List<SandwichDTO> order;
 }

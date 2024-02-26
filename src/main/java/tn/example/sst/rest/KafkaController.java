@@ -7,10 +7,8 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
-import tn.example.sst.broker.KafkaConsumer;
-import tn.example.sst.rest.dto.OrderDTO;
+import tn.example.sst.broker.KafkaHandler;
 
 import java.security.Principal;
 
@@ -18,11 +16,11 @@ public class KafkaController {
     private static final String PRODUCER_BINDING_NAME = "binding-out-0";
 
     private final Logger log = LoggerFactory.getLogger(KafkaController.class);
-    private final KafkaConsumer kafkaConsumer;
+    private final KafkaHandler kafkaHandler;
     private final StreamBridge streamBridge;
 
-    public KafkaController(KafkaConsumer kafkaConsumer, StreamBridge streamBridge) {
-        this.kafkaConsumer = kafkaConsumer;
+    public KafkaController(KafkaHandler kafkaHandler, StreamBridge streamBridge) {
+        this.kafkaHandler = kafkaHandler;
         this.streamBridge = streamBridge;
     }
 
@@ -34,11 +32,11 @@ public class KafkaController {
 
     @GetMapping("/register")
     public ResponseBodyEmitter register(Principal principal) {
-        return kafkaConsumer.register(principal.getName());
+        return kafkaHandler.register(principal.getName());
     }
 
     @GetMapping("/unregister")
     public void unregister(Principal principal) {
-        kafkaConsumer.unregister(principal.getName());
+        kafkaHandler.unregister(principal.getName());
     }
 }

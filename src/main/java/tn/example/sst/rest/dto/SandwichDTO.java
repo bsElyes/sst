@@ -12,8 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class OrderDTO {
-    private Long orderId;
-    private String status;
+public class SandwichDTO {
+    private Integer quantity;
     private List<IngredientDTO> ingredients;
 }

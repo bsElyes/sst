@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 @Profile(Constants.SPRING_PROFILE_API_DOCS)
 public class OpenApiConfiguration {
 
-    public static final String API_FIRST_PACKAGE = "tn.eternity.sample.web.api";
+    public static final String API_FIRST_PACKAGE = "tn.example.sst.rest";
 
     @Bean
     @ConditionalOnMissingBean(name = "apiFirstGroupedOpenAPI")

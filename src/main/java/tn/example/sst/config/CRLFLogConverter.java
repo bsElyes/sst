@@ -21,9 +21,7 @@ import java.util.Map;
  * @see <a href="https://owasp.org/www-community/attacks/Log_Injection">Log Forging Description</a>
  */
 public class CRLFLogConverter extends CompositeConverter<ILoggingEvent> {
-
     public static final Marker CRLF_SAFE_MARKER = MarkerFactory.getMarker("CRLF_SAFE");
-
     private static final String[] SAFE_LOGGERS = {
         "org.hibernate",
         "org.springframework.boot.autoconfigure",

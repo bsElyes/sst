@@ -6,6 +6,8 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 import java.util.Objects;
 
@@ -27,14 +29,17 @@ public class Statistic {
     private Date date;
 
     @Column(name = "best_selling_ingredient")
-    private String bestSellingIngredient;
+    private String bestSellingIngredient = "";
 
     @Column(name = "number_of_sandwiches_sold")
-    private int numberOfSandwichesSold;
+    private int numberOfSandwichesSold = 0;
 
     @Column(name = "profit")
-    private BigDecimal profit;
+    private BigDecimal profit= BigDecimal.ZERO;
 
+    public Statistic(Date date){
+        this.date = date;
+    }
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

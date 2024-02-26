@@ -3,6 +3,13 @@ server:
 spring:
   application:
     name: sst
+  task:
+    execution:
+      thread-name-prefix: sst-task-
+      pool:
+        core-size: 1
+        max-size: 20
+        queue-capacity: 1000
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/test
@@ -11,27 +18,8 @@ spring:
     hikari:
       poolName: Hikari
       auto-commit: false
-  cloud:
-    function:
-      definition: kafkaConsumer;kafkaProducer
-    stream:
-      kafka:
-        binder:
-          replicationFactor: 1
-          auto-create-topics: true
-          brokers: localhost:9092
-      bindings:
-        binding-out-0:
-          destination: sandwich_orders
-          content-type: text/plain
-          group: sandwich_orders_group
-        kafkaConsumer-in-0:
-          destination: sandwich_orders
-          content-type: text/plain
-          group: sandwich_orders_group
-        kafkaProducer-out-0:
-          content-type: text/plain
-          group: sandwich_orders_group
+  kafka:
+    bootstrap-servers: localhost:9092
 application:
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/**

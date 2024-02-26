@@ -1,6 +1,7 @@
 package tn.example.sst.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -34,9 +36,12 @@ public class Order {
     private Date orderDate;
 
     @Column(name = "total_cost", nullable = false)
-    private BigDecimal totalCost;
+    private BigDecimal totalCost = BigDecimal.ZERO;
+
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     public Order(User user) {
         this.user = user;
