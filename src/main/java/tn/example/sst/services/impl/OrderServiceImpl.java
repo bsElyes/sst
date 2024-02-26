@@ -1,4 +1,4 @@
-package tn.example.sst.services;
+package tn.example.sst.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +27,9 @@ import java.util.Optional;
  */
 @Service
 @Transactional
-public class OrderService {
+public class OrderServiceImpl {
 
-    private final Logger log = LoggerFactory.getLogger(OrderService.class);
+    private final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private final OrderItemRepository orderItemRepository;
     private final OrderRepository orderRepository;
@@ -37,7 +37,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final KafkaTemplate<String, OrderResult> kafkaTemplate;
 
-    public OrderService(
+    public OrderServiceImpl(
             OrderItemRepository orderItemRepository,
             OrderRepository orderRepository,
             IngredientRepository ingredientRepository,

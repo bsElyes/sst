@@ -4,6 +4,7 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -25,6 +26,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 import tn.example.sst.management.SecurityMetersService;
 import tn.example.sst.rest.filters.SpaWebFilter;
 import tn.example.sst.security.AuthoritiesConstants;
@@ -38,12 +40,15 @@ import static tn.example.sst.security.SecurityUtils.JWT_ALGORITHM;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
+@Import(SecurityProblemSupport.class)
 public class SecurityConfiguration {
 
     private final ApplicationProperties applicationProperties;
-
-    public SecurityConfiguration(ApplicationProperties applicationProperties) {
+    private final SecurityProblemSupport problemSupport;
+    public SecurityConfiguration(ApplicationProperties applicationProperties,
+                                 SecurityProblemSupport problemSupport) {
         this.applicationProperties = applicationProperties;
+        this.problemSupport = problemSupport;
     }
 
     @Bean

@@ -1,9 +1,8 @@
-package tn.example.sst.services;
+package tn.example.sst.services.impl;
 
 
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import tn.example.sst.domain.Order;
@@ -16,7 +15,8 @@ import tn.example.sst.rest.dto.SandwichDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,13 +26,13 @@ import java.util.Map;
  * Service Implementation for managing {@link tn.example.sst.domain.Statistic}.
  */
 @Service
-public class StatisticService {
+@Log4j2
+public class StatisticServiceImpl {
     private final StatisticRepository statisticRepository;
     private final OrderRepository orderRepository;
     private final Map<LocalDate, Map<Long, Integer>> dailyIngredientReports = new HashMap<>();
-    Logger log = LoggerFactory.getLogger(StatisticService.class);
 
-    public StatisticService(StatisticRepository statisticRepository, OrderRepository orderRepository) {
+    public StatisticServiceImpl(StatisticRepository statisticRepository, OrderRepository orderRepository) {
         this.statisticRepository = statisticRepository;
         this.orderRepository = orderRepository;
     }
@@ -41,12 +41,11 @@ public class StatisticService {
     public void warmUpCache() {
         Statistic statistics = getStatisticsForCurrentDay();
         LocalDate currentDate = LocalDate.now();
-        LocalDate startOfDay = currentDate.atStartOfDay().toLocalDate();
-        LocalDate endOfDay = startOfDay.plusDays(1)
-                .minus(1, ChronoUnit.SECONDS);
+        LocalDateTime startOfDay = currentDate.atTime(LocalTime.MIN);
+        LocalDateTime endOfDay = currentDate.atTime(LocalTime.MAX);
         List<Order> todayOrders = orderRepository.findByOrderDateBetween(
-                new Date(startOfDay.toEpochDay()),
-                new Date(endOfDay.toEpochDay())
+                new Date(startOfDay.toLocalDate().toEpochDay()),
+                new Date(endOfDay.toLocalDate().toEpochDay())
         );
     }
 

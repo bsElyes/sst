@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tn.example.sst.rest.dto.OrderDTO;
 import tn.example.sst.rest.dto.OrderRequest;
 import tn.example.sst.rest.dto.OrderResult;
 import tn.example.sst.rest.exceptions.BadRequestAlertException;
-import tn.example.sst.services.IngredientService;
-import tn.example.sst.services.OrderService;
+import tn.example.sst.services.impl.IngredientServiceImpl;
+import tn.example.sst.services.impl.OrderServiceImpl;
 import tn.example.sst.utils.HeaderUtil;
 
 import java.net.URI;
@@ -25,12 +24,12 @@ import java.util.Optional;
 @RequestMapping("api")
 public class OrderController {
     final Logger log = org.slf4j.LoggerFactory.getLogger(OrderController.class);
-    private final OrderService orderService;
+    private final OrderServiceImpl orderServiceImpl;
     @Value("${spring.application.name}")
     private String applicationName;
 
-    public OrderController(IngredientService ingredientService, OrderService orderService) {
-        this.orderService = orderService;
+    public OrderController(IngredientServiceImpl ingredientServiceImpl, OrderServiceImpl orderServiceImpl) {
+        this.orderServiceImpl = orderServiceImpl;
     }
 
     @PostMapping("/order")
@@ -39,7 +38,7 @@ public class OrderController {
         if (request.getOrder() == null || request.getOrder().isEmpty()) {
             throw new BadRequestAlertException("Order failed", "ORDER", "order_failed");
         }
-        Optional<OrderResult> orderResult = orderService.makeOrder(request);
+        Optional<OrderResult> orderResult = orderServiceImpl.makeOrder(request);
         if (orderResult.isPresent()) {
             return ResponseEntity
                     .created(new URI("/api/order/" + orderResult.get().getOrderId()))

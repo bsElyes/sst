@@ -25,6 +25,8 @@ public class KafkaConfiguration {
 
     public static final String ORDER_GROUP_NAME = "sandwich_orders_group";
     public static final String ORDER_TOPIC_NAME_CONFIG = "sandwich_orders";
+    public static final String ORDER_REQUEST_TOPIC_NAME_CONFIG = "sandwich_request";
+
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
@@ -46,11 +48,10 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, OrderResult> orderDTOkafkaTemplate(ProducerFactory<String, OrderResult> producerFactory) {
+    public KafkaTemplate<String, OrderResult> orderResultkafkaTemplate(ProducerFactory<String, OrderResult> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 
-    //Consumer Config
     @Bean
     public ConsumerFactory<String, OrderResult> orderDTOConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
@@ -58,7 +59,6 @@ public class KafkaConfiguration {
         props.put(ConsumerConfig.GROUP_ID_CONFIG, ORDER_GROUP_NAME);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-
 
         // Configure trusted packages
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "tn.example.sst.rest.dto");
@@ -77,6 +77,11 @@ public class KafkaConfiguration {
     @Bean
     public NewTopic sandwichOrdersTopic() {
         return new NewTopic(ORDER_TOPIC_NAME_CONFIG, 1, (short) 1);
+    }
+
+    @Bean
+    public NewTopic sandwichOrdersRequestTopic() {
+        return new NewTopic(ORDER_REQUEST_TOPIC_NAME_CONFIG, 1, (short) 1);
     }
 
 }

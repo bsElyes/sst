@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import tn.example.sst.rest.dto.OrderRequest;
 import tn.example.sst.rest.dto.OrderResult;
-import tn.example.sst.services.OrderService;
-import tn.example.sst.services.StatisticService;
+import tn.example.sst.rest.dto.SandwichDTO;
+import tn.example.sst.services.impl.OrderServiceImpl;
+import tn.example.sst.services.impl.StatisticServiceImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,20 +19,26 @@ import java.util.Optional;
 public class KafkaHandler {
 
     private final Logger log = LoggerFactory.getLogger(KafkaHandler.class);
-    private final OrderService orderService;
-    private final StatisticService statisticService;
+    private final OrderServiceImpl orderServiceImpl;
+    private final StatisticServiceImpl statisticServiceImpl;
     private final Map<String, SseEmitter> emitters = new HashMap<>();
 
-    public KafkaHandler(OrderService orderService, StatisticService statisticService) {
-        this.orderService = orderService;
-        this.statisticService = statisticService;
+    public KafkaHandler(OrderServiceImpl orderServiceImpl, StatisticServiceImpl statisticServiceImpl) {
+        this.orderServiceImpl = orderServiceImpl;
+        this.statisticServiceImpl = statisticServiceImpl;
     }
 
     @KafkaListener(topics = "sandwich_orders", groupId = "sandwich_orders_group")
-    public void listenOrders(OrderResult message) {
-        System.out.println("Received Order : " + message);
-        statisticService.updateStatistics(message);
+    public void listenOrdersResult(OrderResult message) {
+        System.out.println("Finished Order : " + message);
+        statisticServiceImpl.updateStatistics(message);
     }
+
+//    @KafkaListener(topics = "sandwich_request", groupId = "sandwich_orders_group")
+//    public void listenOrdersRequest(OrderRequest message) {
+//        System.out.println("Received Order : " + message);
+//        orderServiceImpl.makeOrder(message);
+//    }
 
     public SseEmitter register(String key) {
         log.debug("Registering sse client for {}", key);

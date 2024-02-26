@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import tn.example.sst.domain.Ingredient;
 import tn.example.sst.repository.IngredientRepository;
 import tn.example.sst.rest.exceptions.BadRequestAlertException;
-import tn.example.sst.services.IngredientService;
+import tn.example.sst.services.impl.IngredientServiceImpl;
 import tn.example.sst.utils.HeaderUtil;
 import tn.example.sst.utils.ResponseUtil;
 
@@ -27,14 +27,14 @@ public class IngredientController {
 
     private static final String ENTITY_NAME = "ingredient";
     private final Logger log = LoggerFactory.getLogger(IngredientController.class);
-    private final IngredientService ingredientService;
+    private final IngredientServiceImpl ingredientServiceImpl;
     private final IngredientRepository ingredientRepository;
 
     @Value("${spring.application.name}")
     private String applicationName;
 
-    public IngredientController(IngredientService ingredientService, IngredientRepository ingredientRepository) {
-        this.ingredientService = ingredientService;
+    public IngredientController(IngredientServiceImpl ingredientServiceImpl, IngredientRepository ingredientRepository) {
+        this.ingredientServiceImpl = ingredientServiceImpl;
         this.ingredientRepository = ingredientRepository;
     }
 
@@ -51,7 +51,7 @@ public class IngredientController {
         if (ingredient.getIngredientId() != null) {
             throw new BadRequestAlertException("A new ingredient cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Ingredient result = ingredientService.save(ingredient);
+        Ingredient result = ingredientServiceImpl.save(ingredient);
         return ResponseEntity
                 .created(new URI("/api/ingredients/" + result.getIngredientId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getIngredientId().toString()))
@@ -85,7 +85,7 @@ public class IngredientController {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "id_not_found");
         }
 
-        Ingredient result = ingredientService.update(ingredient);
+        Ingredient result = ingredientServiceImpl.update(ingredient);
         return ResponseEntity
                 .ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ingredient.getIngredientId().toString()))
@@ -120,7 +120,7 @@ public class IngredientController {
         if (!ingredientRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "id_not_found");
         }
-        Optional<Ingredient> result = ingredientService.partialUpdate(ingredient);
+        Optional<Ingredient> result = ingredientServiceImpl.partialUpdate(ingredient);
         return ResponseUtil.wrapOrNotFound(
                 result,
                 HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ingredient.getIngredientId().toString())
@@ -135,7 +135,7 @@ public class IngredientController {
     @GetMapping("/ingredients")
     public List<Ingredient> getAllIngredients() {
         log.debug("REST request to get all Ingredients");
-        return ingredientService.findAll();
+        return ingredientServiceImpl.findAll();
     }
 
     /**
@@ -147,7 +147,7 @@ public class IngredientController {
     @GetMapping("/ingredients/{id}")
     public ResponseEntity<Ingredient> getIngredient(@PathVariable("id") Long id) {
         log.debug("REST request to get Ingredient : {}", id);
-        Optional<Ingredient> ingredient = ingredientService.findOne(id);
+        Optional<Ingredient> ingredient = ingredientServiceImpl.findOne(id);
         return ResponseUtil.wrapOrNotFound(ingredient);
     }
 
@@ -160,7 +160,7 @@ public class IngredientController {
     @DeleteMapping("/ingredients/{id}")
     public ResponseEntity<Void> deleteIngredient(@PathVariable("id") Long id) {
         log.debug("REST request to delete Ingredient : {}", id);
-        ingredientService.delete(id);
+        ingredientServiceImpl.delete(id);
         return ResponseEntity
                 .noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

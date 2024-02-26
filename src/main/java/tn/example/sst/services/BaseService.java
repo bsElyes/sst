@@ -1,4 +1,4 @@
-package tn.example.sst.services.impl;
+package tn.example.sst.services;
 
 import java.util.List;
 import java.util.Optional;
