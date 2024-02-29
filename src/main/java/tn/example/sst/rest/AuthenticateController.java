@@ -19,7 +19,7 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.*;
-import tn.example.sst.rest.dto.LoginDTO;
+import tn.example.sst.rest.vm.LoginVM;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -51,7 +51,7 @@ public class AuthenticateController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginDTO loginVM) {
+    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginVM.getUsername(),
                 loginVM.getPassword()

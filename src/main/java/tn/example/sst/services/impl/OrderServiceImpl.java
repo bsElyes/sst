@@ -13,10 +13,10 @@ import tn.example.sst.repository.IngredientRepository;
 import tn.example.sst.repository.OrderItemRepository;
 import tn.example.sst.repository.OrderRepository;
 import tn.example.sst.repository.UserRepository;
-import tn.example.sst.rest.dto.IngredientDTO;
-import tn.example.sst.rest.dto.OrderRequest;
-import tn.example.sst.rest.dto.OrderResult;
-import tn.example.sst.rest.dto.SandwichDTO;
+import tn.example.sst.services.dto.IngredientDTO;
+import tn.example.sst.rest.vm.OrderRequestVM;
+import tn.example.sst.rest.vm.OrderResultVM;
+import tn.example.sst.services.dto.SandwichDTO;
 import tn.example.sst.security.SecurityUtils;
 
 import java.util.List;
@@ -35,14 +35,14 @@ public class OrderServiceImpl {
     private final OrderRepository orderRepository;
     private final IngredientRepository ingredientRepository;
     private final UserRepository userRepository;
-    private final KafkaTemplate<String, OrderResult> kafkaTemplate;
+    private final KafkaTemplate<String, OrderResultVM> kafkaTemplate;
 
     public OrderServiceImpl(
             OrderItemRepository orderItemRepository,
             OrderRepository orderRepository,
             IngredientRepository ingredientRepository,
             UserRepository userRepository,
-            KafkaTemplate<String, OrderResult> kafkaTemplate
+            KafkaTemplate<String, OrderResultVM> kafkaTemplate
     ) {
         this.orderItemRepository = orderItemRepository;
         this.orderRepository = orderRepository;
@@ -139,14 +139,14 @@ public class OrderServiceImpl {
      *
      * @param request the required ingredient to make the order.
      */
-    public Optional<OrderResult> makeOrder(OrderRequest request) {
+    public Optional<OrderResultVM> makeOrder(OrderRequestVM request) {
         return SecurityUtils.getCurrentUserLogin()
                 .flatMap(userRepository::findOneByUsername)
                 .flatMap(user -> {
                     Order newOrder = new Order(user);
                     newOrder = orderRepository.save(newOrder);
-                    OrderResult orderResult = new OrderResult(request.getOrder());
-                    orderResult.setOrderId(newOrder.getOrderId());
+                    OrderResultVM orderResultVM = new OrderResultVM(request.getOrder());
+                    orderResultVM.setOrderId(newOrder.getOrderId());
                     for (SandwichDTO sandwichDTO : request.getOrder()) {
                         for (IngredientDTO ingredient : sandwichDTO.getIngredients()) {
                             Ingredient ing = ingredientRepository.findById(ingredient.getId())
@@ -170,9 +170,9 @@ public class OrderServiceImpl {
                     }
                     newOrder.setTotalCost();
                     orderRepository.save(newOrder);
-                    orderResult.setStatus("READY");
-                    kafkaTemplate.send(KafkaConfiguration.ORDER_TOPIC_NAME_CONFIG, orderResult);
-                    return Optional.of(orderResult);
+                    orderResultVM.setStatus("READY");
+                    kafkaTemplate.send(KafkaConfiguration.ORDER_TOPIC_NAME_CONFIG, orderResultVM);
+                    return Optional.of(orderResultVM);
                 });
     }
 }

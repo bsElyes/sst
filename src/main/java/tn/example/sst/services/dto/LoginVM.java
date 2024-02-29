@@ -1,4 +1,4 @@
-package tn.example.sst.rest.dto;
+package tn.example.sst.rest.vm;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class LoginDTO {
+public class LoginVM {
     @NotNull
     @Size(min = 1, max = 50)
     private String username;

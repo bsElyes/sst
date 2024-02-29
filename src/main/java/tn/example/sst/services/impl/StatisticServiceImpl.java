@@ -9,9 +9,9 @@ import tn.example.sst.domain.Order;
 import tn.example.sst.domain.Statistic;
 import tn.example.sst.repository.OrderRepository;
 import tn.example.sst.repository.StatisticRepository;
-import tn.example.sst.rest.dto.IngredientDTO;
-import tn.example.sst.rest.dto.OrderResult;
-import tn.example.sst.rest.dto.SandwichDTO;
+import tn.example.sst.services.dto.IngredientDTO;
+import tn.example.sst.rest.vm.OrderResultVM;
+import tn.example.sst.services.dto.SandwichDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -65,7 +65,7 @@ public class StatisticServiceImpl {
         return statisticRepository.findByDateBetween(start, end);
     }
 
-    public void generateIngredientReport(OrderResult orderRequest) {
+    public void generateIngredientReport(OrderResultVM orderRequest) {
         // Get the current date
         LocalDate now = LocalDate.now();
         LocalDate currentDate = now.atStartOfDay().toLocalDate();
@@ -126,8 +126,8 @@ public class StatisticServiceImpl {
 
     @Async("taskExecutor")
     @SuppressWarnings("unused")
-    public void updateStatistics(OrderResult orderResult) {
-        log.debug("Updating statistics for {}", orderResult);
+    public void updateStatistics(OrderResultVM orderResultVM) {
+        log.debug("Updating statistics for {}", orderResultVM);
         Statistic statistic = getStatisticsForCurrentDay();
         if (statistic == null) {
             statistic = new Statistic();

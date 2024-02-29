@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,6 +25,8 @@ import java.util.Set;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@Document(indexName = "users")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;

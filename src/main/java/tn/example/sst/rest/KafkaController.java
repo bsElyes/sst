@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
-import tn.example.sst.broker.KafkaHandler;
+import tn.example.sst.services.broker.KafkaHandler;
 
 import java.security.Principal;
 

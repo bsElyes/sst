@@ -4,6 +4,7 @@ package tn.example.sst.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@Document(indexName = "statistic")
 public class Statistic {
 
     @Id

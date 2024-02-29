@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the Statistic entity.
  */
-@Repository
 public interface StatisticRepository extends JpaRepository<Statistic, Long> {
     Statistic findByDate(Date date);
 

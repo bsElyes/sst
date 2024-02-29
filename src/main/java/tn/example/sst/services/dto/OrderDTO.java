@@ -1,4 +1,4 @@
-package tn.example.sst.rest.dto;
+package tn.example.sst.services.dto;
 
 
 import lombok.AllArgsConstructor;

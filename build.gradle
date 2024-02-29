@@ -45,6 +45,7 @@ dependencies {
     //Security
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+    implementation "org.springframework.security:spring-security-data"
 
     //utils
     implementation "org.apache.commons:commons-lang3"
@@ -54,6 +55,15 @@ dependencies {
     //Kafka
     implementation "org.springframework.cloud:spring-cloud-stream"
     implementation "org.springframework.cloud:spring-cloud-starter-stream-kafka"
+
+    //Elasticsearch
+    implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
+
+    //Cache
+    implementation "com.hazelcast:hazelcast-spring:5.3.6"
+    implementation "org.springframework.boot:spring-boot-starter-cache"
+    implementation "javax.cache:cache-api"
+    implementation "com.hazelcast:hazelcast-hibernate53:5.1.0"
 
     //DB Migration
     implementation 'org.flywaydb:flyway-core'
@@ -70,10 +80,25 @@ dependencies {
 
     //testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation "org.springframework.cloud:spring-cloud-stream-test-binder"
+
+    testImplementation("com.tngtech.archunit:archunit-junit5-api:1.2.1") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
+    testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:1.2.1") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
+    //TestContainers
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
+    testImplementation "org.testcontainers:elasticsearch"
+    testImplementation "org.testcontainers:jdbc"
+    testImplementation "org.testcontainers:kafka"
+
+
+
 }
 
 tasks.named('test') {

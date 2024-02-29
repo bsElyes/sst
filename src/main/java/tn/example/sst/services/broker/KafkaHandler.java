@@ -1,13 +1,11 @@
-package tn.example.sst.broker;
+package tn.example.sst.services.broker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import tn.example.sst.rest.dto.OrderRequest;
-import tn.example.sst.rest.dto.OrderResult;
-import tn.example.sst.rest.dto.SandwichDTO;
+import tn.example.sst.rest.vm.OrderResultVM;
 import tn.example.sst.services.impl.OrderServiceImpl;
 import tn.example.sst.services.impl.StatisticServiceImpl;
 
@@ -29,7 +27,7 @@ public class KafkaHandler {
     }
 
     @KafkaListener(topics = "sandwich_orders", groupId = "sandwich_orders_group")
-    public void listenOrdersResult(OrderResult message) {
+    public void listenOrdersResult(OrderResultVM message) {
         System.out.println("Finished Order : " + message);
         statisticServiceImpl.updateStatistics(message);
     }

@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tn.example.sst.rest.dto.OrderRequest;
-import tn.example.sst.rest.dto.OrderResult;
+import tn.example.sst.rest.vm.OrderRequestVM;
+import tn.example.sst.rest.vm.OrderResultVM;
 import tn.example.sst.rest.exceptions.BadRequestAlertException;
 import tn.example.sst.services.impl.IngredientServiceImpl;
 import tn.example.sst.services.impl.OrderServiceImpl;
@@ -33,12 +33,12 @@ public class OrderController {
     }
 
     @PostMapping("/order")
-    public ResponseEntity<OrderResult> makeOrder(@RequestBody OrderRequest request) throws URISyntaxException {
+    public ResponseEntity<OrderResultVM> makeOrder(@RequestBody OrderRequestVM request) throws URISyntaxException {
         log.debug("REST request to make order : {}", request);
         if (request.getOrder() == null || request.getOrder().isEmpty()) {
             throw new BadRequestAlertException("Order failed", "ORDER", "order_failed");
         }
-        Optional<OrderResult> orderResult = orderServiceImpl.makeOrder(request);
+        Optional<OrderResultVM> orderResult = orderServiceImpl.makeOrder(request);
         if (orderResult.isPresent()) {
             return ResponseEntity
                     .created(new URI("/api/order/" + orderResult.get().getOrderId()))

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@Document(indexName = "order")
 public class Order {
 
     @Id

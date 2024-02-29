@@ -14,7 +14,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import tn.example.sst.rest.dto.OrderResult;
+import tn.example.sst.rest.vm.OrderResultVM;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class KafkaConfiguration {
 
     //Producer Config
     @Bean
-    public ProducerFactory<String, OrderResult> orderProducerFactory() {
+    public ProducerFactory<String, OrderResultVM> orderProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -48,12 +48,12 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, OrderResult> orderResultkafkaTemplate(ProducerFactory<String, OrderResult> producerFactory) {
+    public KafkaTemplate<String, OrderResultVM> orderResultkafkaTemplate(ProducerFactory<String, OrderResultVM> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
-    public ConsumerFactory<String, OrderResult> orderDTOConsumerFactory() {
+    public ConsumerFactory<String, OrderResultVM> orderDTOConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, ORDER_GROUP_NAME);
@@ -67,8 +67,8 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, OrderResult> kafkaListenerContainerFactory(ConsumerFactory<String, OrderResult> consumerFactory) {
-        ConcurrentKafkaListenerContainerFactory<String, OrderResult> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, OrderResultVM> kafkaListenerContainerFactory(ConsumerFactory<String, OrderResultVM> consumerFactory) {
+        ConcurrentKafkaListenerContainerFactory<String, OrderResultVM> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
         return factory;
     }
